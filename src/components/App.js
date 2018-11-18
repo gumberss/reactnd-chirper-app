@@ -1,13 +1,32 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
+import LoadingBar from 'react-redux-loading'
+
+import { handleInitialData } from '../actions/shared'
+import Dashboard from './Dashboard'
+import NewTweet from './NewTweet'
+import TweetPage from './TweetPage'
 
 class App extends Component {
+
+  componentDidMount() {
+    this.props.dispatch(handleInitialData())
+  }
+
   render() {
     return (
       <div>
-        Starter Code
+        <LoadingBar />
+        {this.props.loading ? null : <TweetPage match={{params:{id:"2mb6re13q842wu8n106bhk"}}}/>}  
       </div>
     )
   }
 }
 
-export default App
+function mapStateToProps({ authedUser }) {
+  return {
+    loading: authedUser === null
+  }
+}
+
+export default connect(mapStateToProps)(App)
